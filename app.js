@@ -18,7 +18,7 @@ const state = {
     questions: [
         {
             category: "Minat & Motivasi",
-            text: "Apa yang membuat Anda sangat yakin bahwa industri penerbangan adalah masa depan Anda, dan mengapa Triesakti Institute menjadi pilihan utama?",
+            text: "Apa yang membuat Anda yakin bahwa industri penerbangan adalah masa depan Anda, dan mengapa Triesakti Institute Of Airlines menjadi pilihan Anda?",
             indicator: "Kejelasan visi karir dan tingkat loyalitas terhadap brand lembaga.",
             key: "motivation"
         },
