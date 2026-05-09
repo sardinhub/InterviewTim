@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Triesakti Insight Hub</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-overlay">
+        <div class="login-card">
+            <div class="logo-area">
+                <h1 class="text-logo" style="font-size: 1.5rem;">Triesakti Institute <span>of Airlines</span></h1>
+                <p class="app-tagline">INSIGHT HUB LOGIN</p>
+            </div>
+            
+            <div class="form-group">
+                <label>Pilih Akses Login</label>
+                <select id="login-role-select" class="login-input">
+                    <option value="admin">Super Admin (Administrator)</option>
+                    <option value="interviewer">Interviewer (Pewawancara)</option>
+                </select>
+            </div>
+
+            <div id="interviewer-select-group" class="form-group hidden">
+                <label>Pilih Nama Anda</label>
+                <select id="login-interviewer-name" class="login-input">
+                    <!-- Dynamic Interviewers -->
+                </select>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="execute-login-btn">
+                Masuk ke Dashboard <i data-lucide="log-in"></i>
+            </button>
+            
+            <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 2rem;">
+                © 2026 Triesakti Airlines Insight Hub. All Rights Reserved.
+            </p>
+        </div>
+    </div>
+
+    <div class="app-container hidden" id="main-app">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo-area">
+                <h1 class="text-logo">Triesakti Institute <span>of Airlines</span></h1>
+                <p class="app-tagline">Insight Hub</p>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-page="home">
+                    <a href="#home">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li data-page="interview">
+                    <a href="#interview">
+                        <i data-lucide="user-plus"></i>
+                        <span>Interview</span>
+                    </a>
+                </li>
+                <li data-page="database">
+                    <a href="#database">
+                        <i data-lucide="database"></i>
+                        <span>Database</span>
+                    </a>
+                </li>
+                <li data-page="analytics">
+                    <a href="#analytics">
+                        <i data-lucide="bar-chart-3"></i>
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li data-page="admin" class="admin-only">
+                    <a href="#admin">
+                        <i data-lucide="shield-check"></i>
+                        <span>Admin Panel</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="interviewer-info">
+                    <!-- Current User Info (Injected by JS) -->
+                </div>
+                <button class="btn btn-ghost btn-block" id="logout-btn" style="margin-top: 1rem; color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2);">
+                    <i data-lucide="log-out"></i> Logout
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Home Page -->
+            <section id="home" class="page active">
+                <div class="header">
+                    <h2 id="welcome-message">Selamat Datang</h2>
+                    <p>Pantau progres interview dan wawasan strategis hari ini.</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon-box blue"><i data-lucide="users"></i></div>
+                        <div class="stat-info">
+                            <h3 id="total-students">0</h3>
+                            <p>Total Siswa</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon-box gold"><i data-lucide="check-circle"></i></div>
+                        <div class="stat-info">
+                            <h3 id="interviewed-count">0</h3>
+                            <p>Sudah Interview</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon-box amber"><i data-lucide="clock"></i></div>
+                        <div class="stat-info">
+                            <h3 id="pending-count">0</h3>
+                            <p>Belum Interview</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="btn btn-primary" onclick="window.location.hash = 'interview'">
+                        <i data-lucide="plus"></i> Mulai Interview Baru
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.hash = 'database'">
+                        <i data-lucide="search"></i> Cari Siswa
+                    </button>
+                </div>
+            </section>
+
+            <!-- Interview Page -->
+            <section id="interview" class="page">
+                <div class="header">
+                    <h2>Form Interview Siswa</h2>
+                    <p>Input data secara real-time dengan sistem skoring.</p>
+                </div>
+                <div id="interview-container">
+                    <!-- Student Selection / Entry State -->
+                    <div id="setup-step" class="card">
+                        <h3>Pilih Siswa untuk Interview</h3>
+                        <div class="form-group">
+                            <label>Nama Siswa (Ditugaskan kepada Anda)</label>
+                            <select id="student-name-select" class="login-input">
+                                <option value="">Pilih Siswa...</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary btn-block" id="start-interview-btn">
+                            Mulai Tahap Skoring <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Question Cards Flow -->
+                    <div id="question-step" class="card hidden">
+                        <div class="interview-header">
+                            <div class="student-pill">
+                                <i data-lucide="user"></i> <span id="current-student-display">Nama Siswa</span>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="question-content">
+                            <!-- Questions will be injected here -->
+                        </div>
+
+                        <div class="question-nav">
+                            <button class="btn btn-ghost" id="prev-btn"><i data-lucide="chevron-left"></i> Kembali</button>
+                            <button class="btn btn-primary" id="next-btn">Selanjutnya <i data-lucide="chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Database Page -->
+            <section id="database" class="page">
+                <div class="header">
+                    <h2>Database Siswa</h2>
+                    <p>Manajemen data dan ekspor hasil interview.</p>
+                </div>
+                <div class="database-controls">
+                    <div class="search-box">
+                        <i data-lucide="search"></i>
+                        <input type="text" id="search-input" placeholder="Cari nama siswa...">
+                    </div>
+                    <button class="btn btn-outline" id="export-csv">
+                        <i data-lucide="download"></i> Ekspor CSV
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table id="student-table">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Motivasi</th>
+                                <th>Finansial</th>
+                                <th>Referral</th>
+                                <th>Akselerasi</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="student-list">
+                            <!-- Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analytics Page -->
+            <section id="analytics" class="page">
+                <div class="header">
+                    <h2>Analytics Dashboard</h2>
+                    <p>Visualisasi tren dan potensi pendapatan lembaga.</p>
+                </div>
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <h3>Minat Kelas Akselerasi</h3>
+                        <canvas id="acceleration-chart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Profil Kapasitas Finansial</h3>
+                        <canvas id="financial-chart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Kesiapan Referral (Trip Jogja)</h3>
+                        <canvas id="referral-chart"></canvas>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Kesimpulan Strategis</h3>
+                        <div id="strategic-summary" class="summary-text">
+                            Data belum mencukupi. Selesaikan minimal 1 interview untuk melihat wawasan.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Panel Page -->
+            <section id="admin" class="page admin-only">
+                <div class="header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h2>Admin Panel</h2>
+                        <p>Kelola staf pewawancara dan database master siswa.</p>
+                    </div>
+                    <button class="btn btn-danger btn-sm" onclick="logout()" style="margin-top: 0.5rem;">
+                        <i data-lucide="log-out"></i> Logout
+                    </button>
+                </div>
+
+                <div class="admin-grid">
+                    <!-- Manage Interviewers -->
+                    <div class="card" style="margin: 0; max-width: 100%;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h3>Daftar Interviewer Terdaftar</h3>
+                            <button class="btn btn-primary btn-sm" id="show-add-interviewer">
+                                <i data-lucide="plus"></i> Tambah Interviewer
+                            </button>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Jabatan</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="interviewer-table-body">
+                                    <!-- Interviewers injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-grid" style="margin-top: 2rem;">
+                    <!-- Student Master Database -->
+                    <div class="card" style="margin: 0; max-width: 100%;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h3>Database Master Siswa</h3>
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <div class="search-box" style="margin-bottom: 0; min-width: 250px;">
+                                    <i data-lucide="search"></i>
+                                    <input type="text" id="admin-search-input" placeholder="Cari nama atau program...">
+                                </div>
+                                <button class="btn btn-danger btn-sm" id="clear-students-btn" style="background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                                    <i data-lucide="trash-2"></i> Bersihkan Data
+                                </button>
+                                <button class="btn btn-secondary btn-sm" id="import-btn">
+                                    <i data-lucide="upload"></i> Import CSV
+                                </button>
+                                <input type="file" id="csv-file-input" accept=".csv" class="hidden">
+                                <button class="btn btn-primary btn-sm hidden" id="bulk-assign-btn">
+                                    <i data-lucide="user-plus"></i> Tugaskan Terpilih (<span id="selected-count">0</span>)
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40px;"><input type="checkbox" id="select-all-students"></th>
+                                        <th>Nama Siswa</th>
+                                        <th>Program</th>
+                                        <th>Ditugaskan Ke</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="master-student-table-body">
+                                    <!-- Students injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals / Overlays -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Detail Siswa</h3>
+                <button class="close-modal"><i data-lucide="x"></i></button>
+            </div>
+            <div id="modal-content" class="modal-body">
+                <!-- Details injected here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="download-pdf-btn">
+                    <i data-lucide="file-text"></i> Download PDF Summary
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Assign Modal -->
+    <div id="assign-modal" class="modal-overlay hidden">
+        <div class="modal-card" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>Tugaskan Siswa</h3>
+                <button onclick="document.getElementById('assign-modal').classList.add('hidden')"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+                    Pilih interviewer yang akan bertanggung jawab untuk <span id="assign-count-display">0</span> siswa yang dipilih.
+                </p>
+                <div class="form-group">
+                    <label>Pilih Interviewer</label>
+                    <select id="assign-interviewer-select" class="form-control" style="width: 100%; background: rgba(0,0,0,0.3); color: white; padding: 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                        <!-- Options injected by JS -->
+                    </select>
+                </div>
+                <button class="btn btn-primary btn-block" id="confirm-assign-btn">Konfirmasi Penugasan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Interviewer Modal -->
+    <div id="interviewer-modal" class="modal-overlay hidden">
+        <div class="modal-card" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3>Daftarkan Interviewer Baru</h3>
+                <button onclick="document.getElementById('interviewer-modal').classList.add('hidden')"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="new-interviewer-name" placeholder="Contoh: Bu Rina">
+                </div>
+                <div class="form-group">
+                    <label>Jabatan / Role</label>
+                    <input type="text" id="new-interviewer-role" placeholder="Contoh: Senior Interviewer">
+                </div>
+                <button class="btn btn-primary btn-block" id="save-interviewer-btn">Simpan & Daftarkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
