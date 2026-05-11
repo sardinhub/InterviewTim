@@ -669,3 +669,215 @@ tr:hover td {
     .options-grid { grid-template-columns: repeat(3, 1fr); }
     .stats-grid { grid-template-columns: 1fr; }
 }
+
+/* --- Global Box Sizing --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- Responsive Adjustments --- */
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 80px !important;
+        padding: 1rem 0.5rem;
+    }
+    
+    .sidebar .logo-area h1,
+    .sidebar .logo-area p,
+    .sidebar .nav-links span {
+        display: none !important;
+    }
+    
+    .sidebar .nav-links a {
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .main-content {
+        margin-left: 80px !important;
+        width: calc(100% - 80px);
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column !important;
+        display: block !important;
+    }
+
+    /* TOP HEADER */
+    .sidebar {
+        width: 100% !important;
+        height: 60px !important;
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999 !important; /* Sangat tinggi agar bisa diklik */
+        padding: 0 1rem !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        background: rgba(10, 15, 28, 0.9) !important;
+        backdrop-filter: blur(20px) !important;
+        border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+        border-right: none !important;
+    }
+
+    .sidebar .logo-area {
+        margin-bottom: 0 !important;
+    }
+
+    .sidebar .logo-area h1 {
+        font-size: 0.85rem !important;
+    }
+
+    .sidebar .logo-area p {
+        display: none !important;
+    }
+
+    /* BOTTOM NAVIGATION */
+    .sidebar .nav-links {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        height: 70px !important;
+        background: rgba(10, 15, 28, 0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        margin: 0 !important;
+        padding: 0 1rem !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
+        z-index: 9998 !important;
+        list-style: none !important;
+    }
+
+    .sidebar .nav-links li {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .sidebar .nav-links a {
+        flex-direction: column !important;
+        gap: 4px !important;
+        padding: 8px !important;
+        font-size: 0.65rem !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .sidebar .nav-links i {
+        margin: 0 !important;
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    /* LOGOUT BUTTON IN TOP HEADER */
+    .sidebar-footer {
+        margin-top: 0 !important;
+        width: auto !important;
+    }
+
+    .interviewer-info {
+        display: none !important;
+    }
+
+    #logout-btn {
+        background: rgba(239, 68, 68, 0.15) !important;
+        color: #FF4D4D !important;
+        padding: 8px 12px !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(239, 68, 68, 0.3) !important;
+        font-size: 0.75rem !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        pointer-events: auto !important; /* Pastikan bisa diklik */
+    }
+
+    #logout-btn i {
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    /* MAIN CONTENT AREA */
+    .main-content {
+        margin-left: 0 !important;
+        padding: 80px 1.25rem 100px 1.25rem !important; /* Jarak atas bawah agar tidak tertutup */
+        width: 100% !important;
+        min-height: 100vh !important;
+    }
+
+    .page {
+        width: 100% !important;
+    }
+
+    h2 {
+        font-size: 1.5rem !important;
+    }
+
+    /* Table Fix for Mobile */
+    .table-container {
+        margin: 0 -1.25rem !important;
+        width: calc(100% + 2.5rem) !important;
+        border-radius: 0 !important;
+    }
+
+    table {
+        font-size: 0.8rem !important;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.7rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar .logo-area h1 span {
+        display: none !important;
+    }
+    
+    .nav-links a span {
+        display: none !important;
+    }
+
+    .btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .search-box {
+        min-width: 100% !important;
+    }
+
+    .admin-grid .card div[style*="display: flex"] {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem !important;
+    }
+}
+
+/* --- Loading Spinner --- */
+.spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
