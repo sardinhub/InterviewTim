@@ -41,6 +41,11 @@
                 </select>
             </div>
 
+            <div id="admin-password-group" class="form-group">
+                <label>Password Admin</label>
+                <input type="password" id="admin-password" class="login-input" placeholder="••••••••">
+            </div>
+
             <button class="btn btn-primary btn-block" id="execute-login-btn">
                 Masuk ke Dashboard <i data-lucide="log-in"></i>
             </button>
@@ -65,7 +70,7 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li data-page="interview">
+                <li data-page="interview" class="interviewer-only">
                     <a href="#interview">
                         <i data-lucide="user-plus"></i>
                         <span>Interview</span>
@@ -77,7 +82,7 @@
                         <span>Database</span>
                     </a>
                 </li>
-                <li data-page="analytics">
+                <li data-page="analytics" class="admin-only">
                     <a href="#analytics">
                         <i data-lucide="bar-chart-3"></i>
                         <span>Analytics</span>
@@ -207,10 +212,8 @@
                         <thead>
                             <tr>
                                 <th>Nama</th>
-                                <th>Motivasi</th>
-                                <th>Finansial</th>
-                                <th>Referral</th>
-                                <th>Akselerasi</th>
+                                <th>Program</th>
+                                <th>Keputusan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -276,6 +279,7 @@
                                     <tr>
                                         <th>Nama</th>
                                         <th>Jabatan</th>
+                                        <th>Progress Interview</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -317,7 +321,7 @@
                                         <th>Nama Siswa</th>
                                         <th>Program</th>
                                         <th>Ditugaskan Ke</th>
-                                        <th>Status</th>
+                                        <th>Keputusan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>

@@ -16,35 +16,94 @@ const state = {
     currentInterview: null,
     currentQuestionIndex: 0,
     questions: [
+        // 1. Minat dan Ketertarikan Dunia Penerbangan
         {
-            category: "Minat & Motivasi",
-            text: "Apa yang membuat Anda sangat yakin bahwa industri penerbangan adalah masa depan Anda, dan mengapa Triesakti Institute menjadi pilihan utama?",
-            indicator: "Kejelasan visi karir dan tingkat loyalitas terhadap brand lembaga.",
-            key: "motivation"
+            category: "Visi & Motivasi",
+            text: "Ceritakan, apa yang membuat kamu tertarik dengan dunia penerbangan? Apakah ada tokoh, pengalaman, atau tontonan tertentu yang memicu ketertarikan itu?",
+            indicator: "Motivasi Awal",
+            key: "mot_1"
         },
         {
-            category: "Kapasitas Finansial",
-            text: "Untuk mendukung kenyamanan studi Anda, sejauh mana kesiapan orang tua dalam komitmen pembiayaan bulanan? Apakah ada skema khusus yang Anda butuhkan?",
-            indicator: "Kepastian arus kas (cash flow) bagi lembaga dan pemetaan risiko tunggakan.",
-            key: "financial"
+            category: "Visi & Motivasi",
+            text: "Menurut kamu, tantangan terbesar profesi di maskapai penerbangan saat ini apa? Dan bagaimana kamu melihat peluangmu di dalamnya?",
+            indicator: "Pengetahuan Industri",
+            key: "mot_2"
         },
         {
-            category: "Program Referral (Trip Jogja)",
-            text: "Jika Anda bisa membawa sahabat Anda sukses bersama di sini dan mendapatkan bonus Trip ke Jogja, seberapa tertarik Anda untuk menjadi duta (referral) kami?",
-            indicator: "Potensi pertumbuhan leads organik dari internal siswa.",
-            key: "referral"
+            category: "Visi & Motivasi",
+            text: "Jika nanti ada materi yang sulit (misal: Aviation Knowledge atau bahasa Inggris aviation), apa yang akan kamu lakukan untuk tetap semangat?",
+            indicator: "Komitmen Belajar",
+            key: "mot_3"
+        },
+        // 2. Potensi Referral
+        {
+            category: "Potensi Referral",
+            text: "Pernahkah kamu mengajak teman untuk ikut kegiatan positif (les, ekskul, lomba)? Ceritakan caramu meyakinkan mereka.",
+            indicator: "Social Influence",
+            key: "ref_1"
         },
         {
-            category: "Upgrade Kelas Akselerasi",
-            text: "Kami memiliki kelas Akselerasi dengan manfaat prioritas OJT. Jika Anda diberikan kesempatan untuk lulus lebih cepat dan bekerja lebih awal, apakah Anda siap mengambil tantangan ini?",
-            indicator: "Kesiapan siswa untuk membayar premium fee demi nilai tambah karir.",
-            key: "acceleration"
+            category: "Potensi Referral",
+            text: "Jika kamu nantinya merasa puas dan pas dengan pendidikan di sini, apakah kamu bersedia merekomendasikan ke teman atau adik kelas? Kira-kira berapa banyak yang bisa kamu ajak dalam 3 bulan?",
+            indicator: "Kepercayaan Diri",
+            key: "ref_2"
         },
         {
-            category: "Hal Pendukung Lainnya",
-            text: "Sebutkan satu bakat unik atau hobi yang Anda miliki yang bisa dikembangkan melalui kegiatan ekstrakurikuler di kampus kita?",
-            indicator: "Pemetaan bakat untuk branding (prestasi non-akademik).",
-            key: "talent"
+            category: "Potensi Referral",
+            text: "Tours ke Jogja sebagai reward menurut kamu menarik atau tidak? Kenapa?",
+            indicator: "Persepsi Reward",
+            key: "ref_3"
+        },
+        // 3. Kelas Akselerasi
+        {
+            category: "Kelas Akselerasi",
+            text: "Tahu perbedaan kelas reguler dan akselerasi? Kelas akselerasi punya OJT lebih cepat. Apa ekspektasimu tentang OJT?",
+            indicator: "Pemahaman OJT",
+            key: "acc_1"
+        },
+        {
+            category: "Kelas Akselerasi",
+            text: "Di kelas akselerasi, waktu belajar lebih padat dan evaluasi lebih ketat. Dalam skala 1–10, seberapa siap kamu? Mengapa?",
+            indicator: "Kesiapan Belajar",
+            key: "acc_2"
+        },
+        {
+            category: "Kelas Akselerasi",
+            text: "Jika ada dua pilihan: (A) lulus lebih cepat dengan OJT langsung, (B) santai tapi tidak dapat prioritas rekrutmen. Kamu pilih mana? Mengapa?",
+            indicator: "Prioritas Akhir",
+            key: "acc_3"
+        },
+        // 4. Dukungan Finansial
+        {
+            category: "Dukungan Finansial",
+            text: "Apakah orang tua sudah tahu detail biaya per bulan? Kapan terakhir kali kamu diskusi biaya ini dengan mereka?",
+            indicator: "Pola Komunikasi",
+            key: "fin_1"
+        },
+        {
+            category: "Dukungan Finansial",
+            text: "Dari biaya pendidikan dan biaya-biaya lain, seluruhnya menjadi tanggungan orang tua, dan apakah ada skenario jika terjadi keterlambatan?",
+            indicator: "Kemampuan Finansial",
+            key: "fin_2"
+        },
+        // 5. Hobi dan Bakat
+        {
+            category: "Hobi dan Bakat",
+            text: "Selain akademik, apa yang paling sering kamu lakukan di waktu luang? Sudah pernah juara atau tampil di depan umum?",
+            indicator: "Soft Skill",
+            key: "tal_1"
+        },
+        {
+            category: "Hobi dan Bakat",
+            text: "Apakah hobimu bisa membantu karir penerbangan? Contoh: orang yang hobi bahasa asing, fotografi, atau olahraga tim.",
+            indicator: "Relevansi Aviasi",
+            key: "tal_2"
+        },
+        {
+            category: "Hobi dan Bakat",
+            text: "Jika kampus butuh perwakilan untuk lomba vlog, drama, atau public speaking, kira-kira bakatmu cocok di mana?",
+            indicator: "Potensi Promo",
+            key: "tal_3"
         }
     ]
 };
@@ -59,13 +118,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function fetchInitialData() {
-    // 1. Fetch Interviewers
-    const { data: intData, error: intErr } = await supabaseClient.from('interviewers').select('*');
-    if (!intErr) state.interviewers = intData;
+    const loginBtn = document.getElementById('execute-login-btn');
+    if (loginBtn) {
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = 'Menghubungkan ke Database... <i class="spinner"></i>';
+    }
 
-    // 2. Fetch Students
-    const { data: stuData, error: stuErr } = await supabaseClient.from('students').select('*');
-    if (!stuErr) state.students = stuData;
+    try {
+        // 1. Fetch Interviewers
+        const { data: intData, error: intErr } = await supabaseClient.from('interviewers').select('*');
+        if (intErr) throw intErr;
+        state.interviewers = intData || [];
+
+        // 2. Fetch Students
+        const { data: stuData, error: stuErr } = await supabaseClient.from('students').select('*');
+        if (stuErr) throw stuErr;
+        state.students = stuData || [];
+
+        console.log('Database Connected Successfully');
+    } catch (err) {
+        console.error('Database Connection Error:', err);
+        alert('Gagal terhubung ke database. Pastikan internet stabil dan API Key benar.');
+    } finally {
+        if (loginBtn) {
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = 'Masuk ke Dashboard <i data-lucide="log-in"></i>';
+            lucide.createIcons();
+        }
+        renderLoginInterviewerList(); // Segarkan daftar dropdown
+    }
 }
 
 // --- Router ---
@@ -83,6 +164,11 @@ function initRouter() {
         document.querySelectorAll('.page').forEach(page => {
             page.classList.toggle('active', page.id === hash);
         });
+
+        if (hash === 'interview' && state.currentUser && state.currentUser.isAdmin) {
+            window.location.hash = 'home';
+            return;
+        }
 
         if (hash === 'analytics') renderAnalytics();
         if (hash === 'database') renderStudentList();
@@ -161,15 +247,18 @@ function setupEventListeners() {
 function initLogin() {
     const roleSelect = document.getElementById('login-role-select');
     const interviewerGroup = document.getElementById('interviewer-select-group');
+    const adminPasswordGroup = document.getElementById('admin-password-group');
     const loginBtn = document.getElementById('execute-login-btn');
 
     // Handle role change
     roleSelect.addEventListener('change', (e) => {
         if (e.target.value === 'interviewer') {
             interviewerGroup.classList.remove('hidden');
+            adminPasswordGroup.classList.add('hidden'); // Sembunyikan password jika pilih interviewer
             renderLoginInterviewerList();
         } else {
             interviewerGroup.classList.add('hidden');
+            adminPasswordGroup.classList.remove('hidden'); // Tampilkan password jika pilih admin
         }
     });
 
@@ -179,6 +268,10 @@ function initLogin() {
         let user;
 
         if (role === 'admin') {
+            const password = document.getElementById('admin-password').value;
+            if (password !== 'Rahasiaku123') {
+                return alert('Password Administrator salah!');
+            }
             user = { name: 'Super Admin', role: 'Administrator', isAdmin: true };
         } else {
             const interviewerName = document.getElementById('login-interviewer-name').value;
@@ -203,8 +296,14 @@ function initLogin() {
 
 function renderLoginInterviewerList() {
     const select = document.getElementById('login-interviewer-name');
-    select.innerHTML = '<option value="">Pilih Nama...</option>';
+    if (!select) return;
     
+    if (state.interviewers.length === 0) {
+        select.innerHTML = '<option value="">(Belum ada Interviewer terdaftar)</option>';
+        return;
+    }
+
+    select.innerHTML = '<option value="">Pilih Nama Anda...</option>';
     state.interviewers.forEach(int => {
         const opt = document.createElement('option');
         opt.value = int.name;
@@ -220,6 +319,19 @@ function loginAs(user) {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('main-app').classList.remove('hidden');
     
+    // Role-based UI visibility
+    const adminElements = document.querySelectorAll('.admin-only');
+    const interviewerElements = document.querySelectorAll('.interviewer-only');
+    
+    if (user.isAdmin) {
+        adminElements.forEach(el => el.classList.remove('hidden'));
+        interviewerElements.forEach(el => el.classList.add('hidden'));
+        if (state.currentView === 'interview') window.location.hash = 'home';
+    } else {
+        adminElements.forEach(el => el.classList.add('hidden'));
+        interviewerElements.forEach(el => el.classList.remove('hidden'));
+    }
+
     updateInterviewerDisplay();
     updateDashboardStats();
     if (state.currentView === 'database') renderStudentList();
@@ -296,10 +408,31 @@ function renderInterviewerList() {
     list.innerHTML = '';
 
     state.interviewers.forEach(int => {
+        // Hitung Progress Interviewer
+        const assignedStudents = state.students.filter(s => s.assigned_to === int.name);
+        const totalAssigned = assignedStudents.length;
+        const completedCount = assignedStudents.filter(s => s.status === 'completed').length;
+        
+        let progressHtml = '-';
+        if (totalAssigned > 0) {
+            const percentage = Math.round((completedCount / totalAssigned) * 100);
+            progressHtml = `
+                <div style="display: flex; align-items: center; gap: 0.5rem; min-width: 150px;">
+                    <div style="flex-grow: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: ${percentage}%; background: ${percentage === 100 ? '#10B981' : 'var(--accent)'}; border-radius: 4px; transition: width 0.3s ease;"></div>
+                    </div>
+                    <span style="font-size: 0.8rem; white-space: nowrap;">${completedCount} / ${totalAssigned} (${percentage}%)</span>
+                </div>
+            `;
+        } else {
+            progressHtml = '<span class="text-muted" style="font-size: 0.8rem;">Belum ada tugas</span>';
+        }
+
         const row = document.createElement('tr');
         row.innerHTML = `
             <td><strong>${int.name}</strong></td>
             <td>${int.role}</td>
+            <td>${progressHtml}</td>
             <td>
                 <button class="btn btn-ghost btn-sm" onclick="deleteInterviewer(${int.id})" ${int.id === 1 ? 'disabled' : ''}>
                     <i data-lucide="trash-2"></i>
@@ -348,25 +481,35 @@ function renderMasterStudentList(filter = '') {
     if (!list) return;
     list.innerHTML = '';
 
-    const filtered = state.students.filter(s => 
-        s.name.toLowerCase().includes(filter.toLowerCase()) || 
-        (s.program && s.program.toLowerCase().includes(filter.toLowerCase()))
-    );
+    const filtered = state.students.filter(s => {
+        const name = s.name ? s.name.toLowerCase() : '';
+        const program = s.program ? s.program.toLowerCase() : '';
+        const f = filter.toLowerCase();
+        return name.includes(f) || program.includes(f);
+    });
 
-    filtered.forEach(s => {
-        const row = document.createElement('tr');
-        const isInterviewed = s.status === 'completed';
-        
-        row.innerHTML = `
-            <td><input type="checkbox" class="student-checkbox" data-id="${s.id}" onchange="updateSelectionUI()"></td>
-            <td><strong>${s.name}</strong></td>
-            <td><span style="font-size: 0.8rem; opacity: 0.8;">${s.program || '-'}</span></td>
-            <td>${s.assigned_to || '<span class="text-muted">Belum ditugaskan</span>'}</td>
-            <td><span class="badge ${isInterviewed ? 'badge-green' : (s.assigned_to ? 'badge-yellow' : 'badge-red')}">
-                ${isInterviewed ? 'Selesai' : (s.assigned_to ? 'Ditugaskan' : 'Draft')}</span>
-            </td>
-            <td>
-                <button class="btn btn-ghost btn-sm" onclick="deleteStudent('${s.id}')"><i data-lucide="trash-2"></i></button>
+        filtered.forEach(s => {
+            const row = document.createElement('tr');
+            const isInterviewed = s.status === 'completed';
+            const displayDecision = s.decision || s.answers?.calculated_decision;
+            
+            row.innerHTML = `
+                <td><input type="checkbox" class="student-checkbox" data-id="${s.id}" onchange="updateSelectionUI()"></td>
+                <td><strong>${s.name}</strong></td>
+                <td><span style="font-size: 0.8rem; opacity: 0.8;">${s.program || '-'}</span></td>
+                <td>${s.assigned_to || '<span class="text-muted">Belum ditugaskan</span>'}</td>
+                <td><span class="badge ${getDecisionBadge(displayDecision)}">${displayDecision || (s.assigned_to ? 'Ditugaskan' : 'Draft')}</span></td>
+                <td>
+                <div style="display: flex; gap: 0.5rem;">
+                    ${isInterviewed ? 
+                        `<button class="btn btn-secondary btn-sm" onclick="viewInterviewResult('${s.id}')">
+                            <i data-lucide="eye"></i> Hasil
+                        </button>` : 
+                        `<button class="btn btn-ghost btn-sm" onclick="deleteStudent('${s.id}')">
+                            <i data-lucide="trash-2"></i>
+                        </button>`
+                    }
+                </div>
             </td>
         `;
         list.appendChild(row);
@@ -407,22 +550,38 @@ function handleImportCSV(e) {
             const program = parts[1] ? parts[1].trim() : '';
 
             if (name && name !== "Nama" && name !== "Nama Siswa") {
-                newStudents.push({
-                    name: name,
-                    program: program,
-                    status: 'unassigned'
-                });
+                // CEK DUPLIKAT: Jangan masukkan jika nama sudah ada di daftar
+                const isDuplicate = state.students.some(s => s.name.toLowerCase() === name.toLowerCase());
+                
+                if (!isDuplicate) {
+                    newStudents.push({
+                        name: name,
+                        program: program,
+                        status: 'unassigned'
+                    });
+                }
             }
         });
 
+        if (newStudents.length === 0) {
+            alert('Semua siswa dalam file CSV sudah ada di database (tidak ada data baru).');
+            e.target.value = '';
+            return;
+        }
+
         const { data, error } = await supabaseClient.from('students').insert(newStudents).select();
 
-        if (error) return alert('Gagal mengimpor ke database cloud.');
+        if (error) return alert('Gagal mengimpor ke database cloud: ' + error.message);
 
-        state.students = [...state.students, ...data];
-        renderMasterStudentList();
-        updateDashboardStats();
-        alert(`Berhasil mengimpor ${data.length} siswa baru ke Cloud.`);
+        if (data && data.length > 0) {
+            // Ambil ulang data terbaru dari cloud agar sinkron
+            await fetchInitialData(); 
+            renderMasterStudentList();
+            updateDashboardStats();
+            alert(`Berhasil mengimpor ${data.length} siswa baru ke Cloud.`);
+        } else {
+            alert('Tidak ada siswa baru yang ditemukan di file CSV.');
+        }
         e.target.value = ''; // Reset input
     };
     reader.readAsText(file);
@@ -469,6 +628,7 @@ async function confirmBulkAssign() {
     document.getElementById('assign-modal').classList.add('hidden');
     document.getElementById('select-all-students').checked = false;
     renderMasterStudentList();
+    renderInterviewerList();
     alert(`Berhasil menugaskan ${selectedIds.length} siswa ke ${interviewerName} di Cloud.`);
 }
 
@@ -480,7 +640,10 @@ async function deleteStudent(id) {
 
     state.students = state.students.filter(s => s.id !== id);
     
-    if (state.currentView === 'admin') renderMasterStudentList();
+    if (state.currentView === 'admin') {
+        renderMasterStudentList();
+        renderInterviewerList();
+    }
     if (state.currentView === 'database') renderStudentList();
     updateDashboardStats();
 }
@@ -493,6 +656,7 @@ async function resetStudentDatabase() {
 
     state.students = [];
     renderMasterStudentList();
+    renderInterviewerList();
     if (state.currentView === 'database') renderStudentList();
     updateDashboardStats();
     
@@ -664,19 +828,62 @@ function prevQuestion() {
 async function finishInterview() {
     const answers = state.currentInterview.answers;
     
+    // Hitung Rata-rata Kategori
+    const motScore = ((answers.mot_1 || 0) + (answers.mot_2 || 0) + (answers.mot_3 || 0)) / 3;
+    const finScore = ((answers.fin_1 || 0) + (answers.fin_2 || 0)) / 2;
+    const refScore = ((answers.ref_1 || 0) + (answers.ref_2 || 0) + (answers.ref_3 || 0)) / 3;
+    const accScore = ((answers.acc_1 || 0) + (answers.acc_2 || 0) + (answers.acc_3 || 0)) / 3;
+    const talScore = ((answers.tal_1 || 0) + (answers.tal_2 || 0) + (answers.tal_3 || 0)) / 3;
+
+    const decision = getDecisionRecommendation(motScore, finScore, accScore);
+
+    // Format Label (Agar sesuai dengan tipe data TEXT di Supabase)
+    const motLabel = motScore >= 4 ? "Tinggi" : (motScore >= 3 ? "Sedang" : "Rendah");
+    const finLabel = finScore >= 4 ? "Sangat Mampu" : (finScore >= 3 ? "Mampu dengan Cicilan" : "Perlu Perhatian");
+    const refLabel = refScore >= 4 ? "Ya" : (refScore >= 3 ? "Mungkin" : "Tidak");
+    const accLabel = accScore >= 4 ? "Ya" : (accScore >= 3 ? "Tertarik Nanti" : "Tidak");
+
     const updates = {
-        motivation_level: answers.motivation >= 4 ? "Tinggi" : (answers.motivation >= 3 ? "Sedang" : "Rendah"),
-        financial_profile: answers.financial >= 4 ? "Sangat Mampu" : (answers.financial >= 3 ? "Mampu dengan Cicilan" : "Perlu Perhatian Khusus"),
-        referral_interest: answers.referral >= 4 ? "Ya" : (answers.referral >= 3 ? "Mungkin" : "Tidak"),
-        acceleration_interest: answers.acceleration >= 4 ? "Ya" : (answers.acceleration >= 3 ? "Tertarik Nanti" : "Tidak"),
-        answers: answers,
+        motivation_level: motLabel,
+        financial_profile: finLabel,
+        referral_interest: refLabel,
+        acceleration_interest: accLabel,
+        talent_score: Math.round(talScore),
+        decision: decision,
+        answers: { 
+            ...answers, 
+            calculated_decision: decision,
+            avg_mot: motScore,
+            avg_fin: finScore
+        },
         notes: state.currentInterview.notes,
-        status: 'completed'
+        status: 'completed',
+        date: new Date().toLocaleDateString('id-ID')
     };
 
     const { error } = await supabaseClient.from('students').update(updates).eq('id', state.currentInterview.id);
 
-    if (error) return alert('Gagal menyimpan hasil interview ke Cloud.');
+    if (error) {
+        console.warn('First attempt failed, retrying with minimal columns...', error);
+        
+        // Cadangan: Hanya kirim kolom yang PASTI ada di tabel lama
+        const fallback = {
+            motivation_level: motLabel,
+            financial_profile: finLabel,
+            referral_interest: refLabel,
+            acceleration_interest: accLabel,
+            answers: updates.answers,
+            notes: updates.notes,
+            status: 'completed'
+        };
+
+        const { error: error2 } = await supabaseClient.from('students').update(fallback).eq('id', state.currentInterview.id);
+        
+        if (error2) {
+            console.error('Final Save Error:', error2);
+            return alert('Gagal menyimpan ke Cloud. Mohon pastikan tabel "students" di Supabase masih aktif.');
+        }
+    }
 
     // Update local state
     const index = state.students.findIndex(s => s.id === state.currentInterview.id);
@@ -684,12 +891,22 @@ async function finishInterview() {
         state.students[index] = { ...state.students[index], ...updates };
     }
 
-    alert('Data Interview berhasil disimpan ke Database Online!');
+    alert(`Interview Berhasil Disimpan!\nKeputusan: ${decision}`);
     renderInterviewStudentSelect(); 
     document.getElementById('setup-step').classList.remove('hidden');
     document.getElementById('question-step').classList.add('hidden');
     updateDashboardStats();
     window.location.hash = 'database';
+}
+
+function getDecisionRecommendation(mot, fin, acc) {
+    // Kriteria Berdasarkan Skala 1-5
+    if (mot >= 4 && fin >= 3.5) return "Highly Recommended";
+    if (mot >= 4 && acc >= 4) return "Recommended (Acceleration Class)";
+    if (mot >= 3 && fin >= 3) return "Recommended (Regular Class)";
+    if (mot >= 3.5 && fin < 3) return "Conditional (Needs Financial Review)";
+    if (mot < 2.5 && fin < 2.5) return "Not Recommended";
+    return "Under Review";
 }
 
 // --- Database Logic ---
@@ -706,18 +923,25 @@ function renderStudentList(filter = '') {
     const filtered = userStudents.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()));
 
     filtered.reverse().forEach(s => {
-        const isInterviewed = s.answers && Object.keys(s.answers).length > 0;
+        const isInterviewed = s.status === 'completed';
+        const displayDecision = s.decision || s.answers?.calculated_decision;
         const row = document.createElement('tr');
         row.innerHTML = `
             <td><strong>${s.name}</strong></td>
-            <td>${s.motivation_level || '-'}</td>
-            <td><span class="badge ${getFinancialBadge(s.financial_profile)}">${s.financial_profile || 'Belum'}</span></td>
-            <td>${s.referral_interest || '-'}</td>
-            <td><span class="badge badge-blue">${s.acceleration_interest || '-'}</span></td>
+            <td>${s.program || '-'}</td>
+            <td><span class="badge ${getDecisionBadge(displayDecision)}">${displayDecision || 'Draft'}</span></td>
+            <td>${s.assigned_to || '-'}</td>
             <td>
-                <button class="btn btn-ghost btn-sm" onclick="viewStudentDetail(${s.id})">
-                    <i data-lucide="${isInterviewed ? 'eye' : 'play-circle'}"></i>
-                </button>
+                <div style="display: flex; gap: 0.5rem;">
+                    ${isInterviewed ? 
+                        `<button class="btn btn-secondary btn-sm" onclick="viewInterviewResult('${s.id}')">
+                            <i data-lucide="eye"></i> Hasil
+                        </button>` : 
+                        `<button class="btn btn-primary btn-sm" onclick="viewStudentDetail('${s.id}')">
+                            <i data-lucide="play-circle"></i> Mulai
+                        </button>`
+                    }
+                </div>
             </td>
         `;
         list.appendChild(row);
@@ -725,10 +949,12 @@ function renderStudentList(filter = '') {
     lucide.createIcons();
 }
 
-function getFinancialBadge(profile) {
-    if (profile === 'Sangat Mampu') return 'badge-green';
-    if (profile === 'Mampu dengan Cicilan') return 'badge-yellow';
-    return 'badge-red';
+function getDecisionBadge(decision) {
+    if (decision === 'Highly Recommended') return 'badge-green';
+    if (decision?.includes('Recommended')) return 'badge-blue';
+    if (decision?.includes('Conditional')) return 'badge-yellow';
+    if (decision === 'Not Recommended') return 'badge-red';
+    return 'badge-gray';
 }
 
 function viewStudentDetail(id) {
@@ -958,4 +1184,134 @@ function exportToCSV() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+}
+
+function viewInterviewResult(id) {
+    const s = state.students.find(student => student.id === id);
+    if (!s) return;
+
+    const modal = document.getElementById('modal-overlay');
+    const content = document.getElementById('modal-content');
+    const title = document.getElementById('modal-title');
+
+    title.textContent = "Hasil Interview: " + s.name;
+    
+    let html = `
+        <div class="result-summary">
+            <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Rekomendasi Keputusan:</div>
+                <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">${s.decision || 'Under Review'}</div>
+                <div style="margin-top: 0.75rem; font-size: 0.85rem; display: flex; gap: 1rem; opacity: 0.8;">
+                    <span><i data-lucide="user"></i> ${s.assigned_to || '-'}</span>
+                    <span><i data-lucide="calendar"></i> ${s.date || '-'}</span>
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h4 style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Detail Jawaban (14 Poin):</h4>
+                <div style="display: flex; flex-direction: column; gap: 1rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem;">
+                    ${state.questions.map(q => `
+                        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px;">
+                            <div style="font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">${q.category}</div>
+                            <div style="font-size: 0.85rem; color: white; margin-bottom: 0.5rem; line-height: 1.4;">${q.text}</div>
+                            <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; font-style: italic; color: var(--text-muted);">
+                                "${s.notes && s.notes[q.key] ? s.notes[q.key] : '-'}"
+                                <div style="margin-top: 0.5rem; font-weight: bold; font-style: normal; color: var(--accent);">Skor Indikator: ${s.answers && s.answers[q.key] ? s.answers[q.key] : 0}/5</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+
+    content.innerHTML = html;
+    modal.classList.remove('hidden');
+    lucide.createIcons();
+
+    // Setup PDF button for this specific student
+    document.getElementById('download-pdf-btn').onclick = () => generatePDF(s.id);
+}
+
+async function generatePDF(studentId) {
+    const s = state.students.find(x => x.id === studentId);
+    if (!s) return;
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(22);
+    doc.setTextColor(10, 15, 28);
+    doc.text("Triesakti Insight Hub", 20, 25);
+    
+    doc.setFontSize(10);
+    doc.text("Professional Interview Summary Report", 20, 32);
+    
+    doc.setLineWidth(0.5);
+    doc.line(20, 38, 190, 38);
+
+    // Profile
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text("IDENTITAS SISWA", 20, 50);
+    doc.setFont(undefined, 'normal');
+    
+    const profile = [
+        ["Nama Lengkap", s.name],
+        ["Program Studi", s.program || "-"],
+        ["Interviewer", s.assigned_to || "-"],
+        ["Tanggal Interview", s.date || "-"]
+    ];
+
+    let y = 60;
+    profile.forEach(p => {
+        doc.text(p[0], 20, y);
+        doc.text(`: ${p[1]}`, 70, y);
+        y += 8;
+    });
+
+    // Decision
+    y += 5;
+    doc.setFillColor(240, 240, 240);
+    doc.rect(20, y, 170, 15, 'F');
+    doc.setFont(undefined, 'bold');
+    doc.text("REKOMENDASI KEPUTUSAN:", 25, y + 10);
+    doc.setTextColor(0, 102, 204);
+    doc.text(s.decision || "UNDER REVIEW", 85, y + 10);
+    doc.setTextColor(0, 0, 0);
+    
+    // Detail Answers
+    y += 25;
+    doc.setFont(undefined, 'bold');
+    doc.text("DETAIL HASIL INTERVIEW (14 ASPEK)", 20, y);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9);
+    y += 10;
+
+    state.questions.forEach((q, i) => {
+        if (y > 270) {
+            doc.addPage();
+            y = 20;
+        }
+        
+        doc.setFont(undefined, 'bold');
+        const catText = `${i+1}. [${q.category}] ${q.indicator}`;
+        doc.text(catText, 20, y);
+        y += 5;
+        
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(100, 100, 100);
+        const score = s.answers && s.answers[q.key] ? s.answers[q.key] : 0;
+        doc.text(`Skor: ${score}/5`, 20, y);
+        
+        y += 5;
+        doc.setTextColor(0, 0, 0);
+        const note = s.notes && s.notes[q.key] ? s.notes[q.key] : "-";
+        const splitNote = doc.splitTextToSize(`Catatan: ${note}`, 160);
+        doc.text(splitNote, 20, y);
+        y += (splitNote.length * 5) + 5;
+    });
+
+    doc.save(`Triesakti_Report_${s.name}.pdf`);
 }
