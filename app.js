@@ -430,7 +430,7 @@ function renderInterviewerList() {
 
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td><strong>${int.name}</strong></td>
+            <td><a href="javascript:void(0)" onclick="viewInterviewerDetails('${int.name.replace(/'/g, "\\'")}')" style="color: var(--accent); text-decoration: none; font-weight: bold; border-bottom: 1px dashed var(--accent); cursor: pointer; display: inline-block; padding-bottom: 2px;">${int.name}</a></td>
             <td>${int.role}</td>
             <td>${progressHtml}</td>
             <td>
@@ -441,6 +441,57 @@ function renderInterviewerList() {
         `;
         list.appendChild(row);
     });
+    lucide.createIcons();
+}
+
+function viewInterviewerDetails(interviewerName) {
+    const assignedStudents = state.students.filter(s => s.assigned_to === interviewerName);
+    const completedStudents = assignedStudents.filter(s => s.status === 'completed');
+    const pendingStudents = assignedStudents.filter(s => s.status !== 'completed');
+
+    const modal = document.getElementById('modal-overlay');
+    const content = document.getElementById('modal-content');
+    const title = document.getElementById('modal-title');
+
+    title.textContent = "Detail Penugasan: " + interviewerName;
+    
+    const pdfBtn = document.getElementById('download-pdf-btn');
+    if (pdfBtn) pdfBtn.classList.add('hidden');
+
+    let html = \`
+        <div style="margin-bottom: 2rem;">
+            <h4 style="margin-bottom: 1rem; color: #10B981; display: flex; align-items: center; gap: 0.5rem;">
+                <i data-lucide="check-circle"></i> Sudah Diinterview (\${completedStudents.length})
+            </h4>
+            \${completedStudents.length > 0 ? \`
+                <ul style="list-style: none; padding: 0;">
+                    \${completedStudents.map(s => \`
+                        <li style="padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10B981; margin-bottom: 0.5rem; border-radius: 4px;">
+                            <strong>\${s.name}</strong> <span style="font-size: 0.8rem; color: var(--text-muted);">— \${s.decision || 'Selesai'}</span>
+                        </li>
+                    \`).join('')}
+                </ul>
+            \` : '<p style="color: var(--text-muted); font-size: 0.9rem;">Belum ada siswa yang selesai diinterview.</p>'}
+        </div>
+
+        <div>
+            <h4 style="margin-bottom: 1rem; color: #F59E0B; display: flex; align-items: center; gap: 0.5rem;">
+                <i data-lucide="clock"></i> Belum Diinterview (\${pendingStudents.length})
+            </h4>
+            \${pendingStudents.length > 0 ? \`
+                <ul style="list-style: none; padding: 0;">
+                    \${pendingStudents.map(s => \`
+                        <li style="padding: 0.75rem; background: rgba(245, 158, 11, 0.1); border-left: 3px solid #F59E0B; margin-bottom: 0.5rem; border-radius: 4px;">
+                            <strong>\${s.name}</strong> <span style="font-size: 0.8rem; color: var(--text-muted);">— \${s.program || '-'}</span>
+                        </li>
+                    \`).join('')}
+                </ul>
+            \` : '<p style="color: var(--text-muted); font-size: 0.9rem;">Tidak ada tugas interview yang tertunda.</p>'}
+        </div>
+    \`;
+
+    content.innerHTML = html;
+    modal.classList.remove('hidden');
     lucide.createIcons();
 }
 
@@ -1060,19 +1111,23 @@ function renderAnalytics() {
     });
 
     // Financial Chart
+    // FIX: Ensure labels match what is saved in finishInterview ("Perlu Perhatian")
+    const finLabels = ['Sangat Mampu', 'Mampu dengan Cicilan', 'Perlu Perhatian'];
+    const finValues = finLabels.map(label => finData[label] || 0);
+
     charts.fin = new Chart(document.getElementById('financial-chart'), {
         type: 'bar',
         data: {
-            labels: Object.keys(finData),
+            labels: finLabels,
             datasets: [{
                 label: 'Jumlah Siswa',
-                data: Object.values(finData),
+                data: finValues,
                 backgroundColor: '#C9A84C'
             }]
         },
         options: { 
             scales: { 
-                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#fff' } },
+                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#fff', stepSize: 1 } },
                 x: { ticks: { color: '#fff' } }
             },
             plugins: { legend: { display: false } }
@@ -1103,155 +1158,40 @@ function renderAnalytics() {
         <ul style="margin-top: 1rem; list-style: none;">
             <li style="margin-bottom: 0.5rem;">🚀 <strong>${accelRate}%</strong> berminat kelas Akselerasi (Potensi pendapatan tambahan ± Rp ${potentialRevenue.toLocaleString('id-ID')}).</li>
             <li style="margin-bottom: 0.5rem;">📣 <strong>${refRate}%</strong> siap menjalankan program referral, menghemat biaya marketing organik.</li>
-            <li>💰 <strong>${finData['Sangat Mampu']}</strong> siswa berada di profil finansial aman (Green Flag).</li>
+            <li>💰 <strong>${finData['Sangat Mampu'] || 0}</strong> siswa berada di profil finansial aman (Green Flag).</li>
         </ul>
     `;
 }
 
 // --- PDF & Export Logic ---
-function generatePDF(s) {
+// Consolidated PDF Generation Function
+async function generatePDF(studentIdOrObject) {
+    let s;
+    if (typeof studentIdOrObject === 'string') {
+        s = state.students.find(x => x.id === studentIdOrObject);
+    } else {
+        s = studentIdOrObject;
+    }
+
+    if (!s) return alert('Data siswa tidak ditemukan.');
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-
-    // Design
+    
+    // Header design
     doc.setFillColor(10, 22, 40);
     doc.rect(0, 0, 210, 40, 'F');
     
     doc.setTextColor(201, 168, 76);
-    doc.setFontSize(18);
+    doc.setFontSize(22);
     doc.text('Triesakti Institute of Airlines', 20, 25);
     
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
-    doc.text('RESUME HASIL INTERVIEW SISWA', 20, 32);
+    doc.text('PROFESSIONAL INTERVIEW SUMMARY REPORT', 20, 32);
 
-    // Content
+    // Profile Section
     doc.setTextColor(0, 0, 0);
-    doc.setFontSize(12);
-    doc.setFont(undefined, 'bold');
-    doc.text(`Nama Siswa: ${s.name}`, 20, 55);
-    doc.setFont(undefined, 'normal');
-    doc.text(`Tanggal: ${new Date(s.date).toLocaleDateString('id-ID')}`, 140, 55);
-
-    doc.line(20, 60, 190, 60);
-
-    let y = 75;
-    const metrics = [
-        ["Kekuatan Motivasi", s.motivation_level],
-        ["Profil Finansial", s.financial_profile],
-        ["Minat Referral", s.referral_interest],
-        ["Minat Akselerasi", s.acceleration_interest]
-    ];
-
-    metrics.forEach(m => {
-        doc.setFont(undefined, 'bold');
-        doc.text(m[0], 20, y);
-        doc.setFont(undefined, 'normal');
-        doc.text(`: ${m[1]}`, 70, y);
-        y += 10;
-    });
-
-    y += 10;
-    doc.setFont(undefined, 'bold');
-    doc.text("Catatan Khusus (Bakat/Karakter):", 20, y);
-    y += 10;
-    doc.setFont(undefined, 'normal');
-    
-    state.questions.forEach(q => {
-        const note = s.notes[q.key] || "-";
-        const splitNote = doc.splitTextToSize(`${q.category}: ${note}`, 170);
-        doc.text(splitNote, 20, y);
-        y += (splitNote.length * 7);
-    });
-
-    doc.save(`Interview_${s.name}.pdf`);
-}
-
-function exportToCSV() {
-    if (state.students.length === 0) return alert('Data kosong.');
-
-    let csv = "Nama,Motivasi,Finansial,Referral,Akselerasi,Tanggal\n";
-    state.students.forEach(s => {
-        csv += `${s.name},${s.motivation_level},${s.financial_profile},${s.referral_interest},${s.acceleration_interest},${s.date}\n`;
-    });
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', 'Triesakti_Interview_Data.csv');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-function viewInterviewResult(id) {
-    const s = state.students.find(student => student.id === id);
-    if (!s) return;
-
-    const modal = document.getElementById('modal-overlay');
-    const content = document.getElementById('modal-content');
-    const title = document.getElementById('modal-title');
-
-    title.textContent = "Hasil Interview: " + s.name;
-    
-    let html = `
-        <div class="result-summary">
-            <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Rekomendasi Keputusan:</div>
-                <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">${s.decision || 'Under Review'}</div>
-                <div style="margin-top: 0.75rem; font-size: 0.85rem; display: flex; gap: 1rem; opacity: 0.8;">
-                    <span><i data-lucide="user"></i> ${s.assigned_to || '-'}</span>
-                    <span><i data-lucide="calendar"></i> ${s.date || '-'}</span>
-                </div>
-            </div>
-
-            <div class="notes-section">
-                <h4 style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Detail Jawaban (14 Poin):</h4>
-                <div style="display: flex; flex-direction: column; gap: 1rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem;">
-                    ${state.questions.map(q => `
-                        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px;">
-                            <div style="font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">${q.category}</div>
-                            <div style="font-size: 0.85rem; color: white; margin-bottom: 0.5rem; line-height: 1.4;">${q.text}</div>
-                            <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; font-style: italic; color: var(--text-muted);">
-                                "${s.notes && s.notes[q.key] ? s.notes[q.key] : '-'}"
-                                <div style="margin-top: 0.5rem; font-weight: bold; font-style: normal; color: var(--accent);">Skor Indikator: ${s.answers && s.answers[q.key] ? s.answers[q.key] : 0}/5</div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        </div>
-    `;
-
-    content.innerHTML = html;
-    modal.classList.remove('hidden');
-    lucide.createIcons();
-
-    // Setup PDF button for this specific student
-    document.getElementById('download-pdf-btn').onclick = () => generatePDF(s.id);
-}
-
-async function generatePDF(studentId) {
-    const s = state.students.find(x => x.id === studentId);
-    if (!s) return;
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
-    // Header
-    doc.setFontSize(22);
-    doc.setTextColor(10, 15, 28);
-    doc.text("Triesakti Insight Hub", 20, 25);
-    
-    doc.setFontSize(10);
-    doc.text("Professional Interview Summary Report", 20, 32);
-    
-    doc.setLineWidth(0.5);
-    doc.line(20, 38, 190, 38);
-
-    // Profile
     doc.setFontSize(12);
     doc.setFont(undefined, 'bold');
     doc.text("IDENTITAS SISWA", 20, 50);
@@ -1271,18 +1211,46 @@ async function generatePDF(studentId) {
         y += 8;
     });
 
-    // Decision
+    // Decision Section
     y += 5;
+    const displayDecision = s.decision || s.answers?.calculated_decision || "UNDER REVIEW";
     doc.setFillColor(240, 240, 240);
     doc.rect(20, y, 170, 15, 'F');
     doc.setFont(undefined, 'bold');
     doc.text("REKOMENDASI KEPUTUSAN:", 25, y + 10);
-    doc.setTextColor(0, 102, 204);
-    doc.text(s.decision || "UNDER REVIEW", 85, y + 10);
+    
+    // Color code decision
+    if (displayDecision.includes("Highly")) doc.setTextColor(16, 185, 129);
+    else if (displayDecision.includes("Recommended")) doc.setTextColor(59, 130, 246);
+    else if (displayDecision.includes("Conditional")) doc.setTextColor(245, 158, 11);
+    else if (displayDecision.includes("Not")) doc.setTextColor(239, 68, 68);
+    else doc.setTextColor(100, 100, 100);
+
+    doc.text(displayDecision.toUpperCase(), 85, y + 10);
     doc.setTextColor(0, 0, 0);
     
-    // Detail Answers
+    // Metrics Summary
     y += 25;
+    doc.setFont(undefined, 'bold');
+    doc.text("RINGKASAN METRIK", 20, y);
+    doc.setFont(undefined, 'normal');
+    y += 10;
+    
+    const metrics = [
+        ["Kekuatan Motivasi", s.motivation_level || "-"],
+        ["Profil Finansial", s.financial_profile || "-"],
+        ["Minat Referral", s.referral_interest || "-"],
+        ["Minat Akselerasi", s.acceleration_interest || "-"]
+    ];
+
+    metrics.forEach(m => {
+        doc.text(m[0], 25, y);
+        doc.text(`: ${m[1]}`, 75, y);
+        y += 8;
+    });
+
+    // Detail Answers
+    y += 10;
     doc.setFont(undefined, 'bold');
     doc.text("DETAIL HASIL INTERVIEW (14 ASPEK)", 20, y);
     doc.setFont(undefined, 'normal');
@@ -1313,5 +1281,74 @@ async function generatePDF(studentId) {
         y += (splitNote.length * 5) + 5;
     });
 
-    doc.save(`Triesakti_Report_${s.name}.pdf`);
+    doc.save(`Triesakti_Report_${s.name.replace(/\s+/g, '_')}.pdf`);
 }
+
+function exportToCSV() {
+    if (state.students.length === 0) return alert('Data kosong.');
+
+    let csv = "Nama,Motivasi,Finansial,Referral,Akselerasi,Tanggal\n";
+    state.students.forEach(s => {
+        csv += `${s.name},${s.motivation_level},${s.financial_profile},${s.referral_interest},${s.acceleration_interest},${s.date}\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'Triesakti_Interview_Data.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+function viewInterviewResult(id) {
+    const s = state.students.find(student => student.id === id);
+    if (!s) return;
+
+    const modal = document.getElementById('modal-overlay');
+    const content = document.getElementById('modal-content');
+    const title = document.getElementById('modal-title');
+
+    const displayDecision = s.decision || s.answers?.calculated_decision || 'Under Review';
+    
+    let html = `
+        <div class="result-summary">
+            <div style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">Rekomendasi Keputusan:</div>
+                <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent);">${displayDecision}</div>
+                <div style="margin-top: 0.75rem; font-size: 0.85rem; display: flex; gap: 1rem; opacity: 0.8;">
+                    <span><i data-lucide="user"></i> ${s.assigned_to || '-'}</span>
+                    <span><i data-lucide="calendar"></i> ${s.date || '-'}</span>
+                </div>
+            </div>
+
+            <div class="notes-section">
+                <h4 style="margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Detail Jawaban (14 Poin):</h4>
+                <div style="display: flex; flex-direction: column; gap: 1rem; max-height: 400px; overflow-y: auto; padding-right: 0.5rem;">
+                    ${state.questions.map(q => `
+                        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 10px;">
+                            <div style="font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">${q.category}</div>
+                            <div style="font-size: 0.85rem; color: white; margin-bottom: 0.5rem; line-height: 1.4;">${q.text}</div>
+                            <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; font-style: italic; color: var(--text-muted);">
+                                "${s.notes && s.notes[q.key] ? s.notes[q.key] : '-'}"
+                                <div style="margin-top: 0.5rem; font-weight: bold; font-style: normal; color: var(--accent);">Skor Indikator: ${s.answers && s.answers[q.key] ? s.answers[q.key] : 0}/5</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+
+    content.innerHTML = html;
+    modal.classList.remove('hidden');
+    lucide.createIcons();
+
+    // Setup PDF button for this specific student
+    document.getElementById('download-pdf-btn').onclick = () => generatePDF(s);
+}
+
+// The old duplicate generatePDF function has been removed.
+
